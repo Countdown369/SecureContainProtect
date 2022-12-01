@@ -326,6 +326,7 @@ def get_random_dataframe(x=1):
 
 
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 import contractions
 from nltk.tag import pos_tag
 from nltk.stem import WordNetLemmatizer
@@ -377,10 +378,11 @@ def clean_text(text):
   tokens = word_tokenize(text)
   # tag the words with part of speech
   tagged_text = pos_tag(tokens)
-  
+  # remove very common grammatical words like and, but, for, etc.
+  stop_words = stopwords.words("english")
   # convert words to their roots (i.e. staffing to staff)
   lemmatizer = WordNetLemmatizer()
-  lemmatized = [lemmatizer.lemmatize(word,fix_pos(tag)) for word, tag in tagged_text]
+  lemmatized = [lemmatizer.lemmatize(word,fix_pos(tag)) for word, tag in tagged_text if word not in stop_words]
 
   # join the words back into one document again and return them
   cleaned_text = " ".join(lemmatized)
@@ -431,7 +433,7 @@ def get_sentiment(doc):
 
 
 # make a dataframe with 100 random scps
-df_scp = get_random_dataframe(100)
+df_scp = get_random_dataframe(1)
 df_scp
 
 
